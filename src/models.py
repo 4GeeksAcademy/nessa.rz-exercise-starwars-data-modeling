@@ -9,17 +9,14 @@ Base = declarative_base()
 
 class User(Base):
     __tablename__ = 'user'
-    # Here we define columns for the table person
-    # Notice that each column is also a normal Python instance attribute.
     id = Column(Integer, primary_key=True)
     user_name = Column(String(250), nullable=False)
     email = Column(String(250), nullable=False)
     password = Column(String(250), nullable=False)
+    character = relationship("Character", back_populates="user")
 
 class Character(Base):
     __tablename__ = 'character'
-    # Here we define columns for the table address.
-    # Notice that each column is also a normal Python instance attribute.
     uid = Column(Integer, primary_key=True)
     name = Column(String(250), nullable=False)
     gender = Column(String(250), nullable=True)
@@ -30,13 +27,11 @@ class Character(Base):
     eye_color = Column(String(250), nullable=True)
     birth_year = Column(Integer, nullable=False)
     homeworld = Column(String(250), nullable=False)
-    person_id = Column(Integer, ForeignKey('user.id'))
-    person = relationship(User)
+    character_id = Column(Integer, ForeignKey('user.id'))
+    user = relationship("User", back_populates="character")
 
 class Planet (Base):
     __tablename__ = 'planet'
-    # Here we define columns for the table address.
-    # Notice that each column is also a normal Python instance attribute.
     uid = Column(Integer, primary_key=True)
     name = Column(String(250), nullable=False)
     rotation_period = Column(Integer, nullable=False)
@@ -45,8 +40,8 @@ class Planet (Base):
     climate = Column(String(250), nullable=False)
     gravity = Column(String(250), nullable=False)
     terrain = Column(String(250), nullable=False)
-    person_id = Column(Integer, ForeignKey('user.id'))
-    person = relationship(User)
+    planet_id = Column(Integer, ForeignKey('user.id'))
+    user = relationship("User", back_populates="planet")
 
     def to_dict(self):
         return {}
