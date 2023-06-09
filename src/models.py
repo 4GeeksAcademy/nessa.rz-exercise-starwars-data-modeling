@@ -13,7 +13,14 @@ class User(Base):
     user_name = Column(String(250), nullable=False)
     email = Column(String(250), nullable=False)
     password = Column(String(250), nullable=False)
-    character = relationship("Character", back_populates="user")
+    character = relationship("Favorite", back_populates="user")
+
+class Favorite(Base):
+    __tablename__ = 'favorite'
+    id = Column(Integer, primary_key=True)
+    favorite_planets = Column(String(250), nullable=False)
+    favorite_characters = Column(String(250), nullable=False)
+    favorite_id = Column(Integer, ForeignKey("user.id"))
 
 class Character(Base):
     __tablename__ = 'character'
@@ -27,8 +34,8 @@ class Character(Base):
     eye_color = Column(String(250), nullable=True)
     birth_year = Column(Integer, nullable=False)
     homeworld = Column(String(250), nullable=False)
-    character_id = Column(Integer, ForeignKey('user.id'))
-    user = relationship("User", back_populates="character")
+    character_id = Column(Integer, ForeignKey("favorite.id"))
+    favorite = relationship("favorite", back_populates="character")
 
 class Planet (Base):
     __tablename__ = 'planet'
@@ -40,8 +47,8 @@ class Planet (Base):
     climate = Column(String(250), nullable=False)
     gravity = Column(String(250), nullable=False)
     terrain = Column(String(250), nullable=False)
-    planet_id = Column(Integer, ForeignKey('user.id'))
-    user = relationship("User", back_populates="planet")
+    planet_id = Column(Integer, ForeignKey("favorite.id"))
+    favorite = relationship("favorite", back_populates="planet")
 
     def to_dict(self):
         return {}
